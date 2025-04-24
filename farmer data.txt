@@ -1,0 +1,99 @@
+curl -v -X POST http://localhost:5000/api/form -b ceo_cookies.txt -F "photo=@C:\Users\User\Desktop\test.jpg"
+curl -v -X POST http://localhost:5000/api/auth/login -H "Content-Type: application/json" -d "{\"email\":\"ceo@example.com\",\"password\":\"ceo123\"}" -c ceo_cookies.txt
+
+
+okay let me tell you about the frontend little more clearly so there will be login options which will contain two options that is CEO and SuperAdmin and in the Suer admin dashboard there will be two cards where one will be user creation or ceo creation for the ceo with the details as you know, and the other card should be dwnload and export data, as you know the the data entry made in the form by the ceos will be shown here in a tabular form and a export button will be kept there in the top corner so that there if one click the file will be downloaded in excel format as you know. and now for the ceo dashboard it will be pretty much similar like there it will be 2 cards, one with the form fill up(give it a good name) and another one will display the entries(give it a name), so the form will have the entries as you know also the prefilled datas, and then loaction selector that is the hierarchy selection, and the rest of the form with mandatory and non mandatory fields, now for the other tab the followinf user will be able to see the his/her entries that he has done and that there will be a edit option in the corner where the user will be able to edit it (within 1 hr) of the entry. and the colour sceme that i think i will use is blue and green. and also one thing for the download part in the superadmin dashboard of all the entries when user will be editing i think lets make it like Soft Lock/Transaction Awareness (Recommended)
+When admin hits Download, we export data as it exists at that timestamp
+
+If a user is editing simultaneously:
+
+Their edit will NOT be reflected in that download
+
+But their new edit will be saved properly
+
+This ensures data consistency at point-in-time
+
+Implementation:
+
+When download starts, backend queries all entries as they exist "now".
+
+Edits happening after this timestamp won't affect current export.
+
+We log the export timestamp in logs/audit if needed.
+
+Add a “Last Updated” Column
+Each entry includes a created_at and last_edited_at
+
+The Excel will always reflect the last saved version at download time
+
+Admin can track if edits were made recently. what say give me what do you think
+
+
+cd "C:\Users\User\Desktop\New folder (4)\New folder (2)\farmer-data-backend"
+
+
+
+
+
+
+
+
+
+
+
+
+/api/auth
+routes/form.js
+
+
+
+
+
+
+
+
+
+
+npx sequelize-cli migration:generate --name add-last-edited-at-to-farmers
+
+
+
+Changes i want,
+Frontend & Backend:
+1. the location along with the ceo details should be shown before the farmer name and the same in the my entries view table too.
+2. remove that long and lat entry boxes and keep it default with lat and long
+3. make the fields like age, contact num(10 digits) adhar(12 digits) annual income(only number) and make the crops in a add more system that is after one entry in the side add more or plus box will be shown where one more can be added and also i minus button to delete the biox.
+4. keep that land type drop down with own and rented two options
+5. member fee should be only numerical
+6.  in my entries display the name of the farmer, age, and the location, sex and created and updated at and the edit button with the id.
+7. make the dashboard little more smooth and optimising like in the corner the dashboard button make it red colour and also give a hello message in (with name ) in ceo as well as superadmin.
+8. in superadmin farmer data add an extra column with the ceo name and then the fpo name then name of the farmer, age, and the location, sex and created and last edited at.
+9. make the login screen little more haptic like the first page should show melocome with a gradient in thebackground and the login box should come in the middle of the screen
+
+what do you think of these changes 
+
+// {
+//   "development": {
+//     "url": "postgres://app_user:secure_password_123@localhost:5432/farmer_data",
+//     "dialect": "postgres"
+//   },
+//   "production": {
+//     "url": "postgres://app_user:secure_password_123@localhost:5432/farmer_data",
+//     "dialect": "postgres"
+//   }
+// }
+
+
+Some New Changes:
+1.Remove that membership fee from the farmer-form.
+2.add a new tile to the ceo dashbboard where the name will be members/shareholders. that will be actually an extended model of the current registration form that is the ceo will choose from the no.of entries he has done, via name in a dropdown of those records whomhe has made an entry,
+ and then when he chooses from that list then the state, distriict and rest of the location will be predisplayed in the same form like structure with his father name and contact number. and 3 new blanks will be there that are, Membership Fee(the one we removed it will be used here)
+then reciept no. and then a picture of the reciept that he will click and upload. and it will be the membership window. 
+3. And a similar membership entry tile in the homepage again, where he will be seeing the entries of the membership window with name membership fee an the location and an edit button also add that will only edit reciept number, membership fee and picture. and the time for it same as our my entries module 60 seconds.
+
+4. Similarly add an tile in super admin dashboard where the entries of the membership will be shown done by all the ceos. and put  filter of name of fpo, via which seeing it will be easy and also add the export button
+5. also remove themembership fee from our form, and put that here in this entry i hope you get it!
+ 
+
+
+

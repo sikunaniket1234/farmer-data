@@ -1,0 +1,10 @@
+
+{
+  "development": {
+    "username": "app_user",
+    "password": "secure_password_123",
+    "database": "farmer_data",
+    "host": "localhost",
+    "dialect": "postgres"
+  }
+}
