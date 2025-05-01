@@ -1,6 +1,9 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
+// Determine the API base URL from environment variables or use a default
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -17,7 +20,7 @@ export const AuthProvider = ({ children }) => {
         return;
       }
       try {
-        const res = await axios.get('http://localhost:5000/api/auth/validate', { withCredentials: true });
+        const res = await axios.get(`${API_BASE}/api/auth/validate`, { withCredentials: true });
         const validatedUser = res.data.user;
         setUser(validatedUser);
         localStorage.setItem('user', JSON.stringify(validatedUser)); // Persist user
@@ -35,7 +38,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const res = await axios.post(
-        'http://localhost:5000/api/auth/login',
+        `${API_BASE}/api/auth/login`,
         { email, password },
         { withCredentials: true }
       );
@@ -51,7 +54,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post('http://localhost:5000/api/auth/logout', {}, { withCredentials: true });
+      await axios.post(`${API_BASE}/api/auth/logout`, {}, { withCredentials: true });
       setUser(null);
       localStorage.removeItem('user');
     } catch (err) {
