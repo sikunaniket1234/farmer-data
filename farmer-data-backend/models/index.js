@@ -9,6 +9,11 @@ const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.js')[env];
 const db = {};
 
+// Check if config.url is valid
+if (!config || !config.url) {
+  throw new Error('Database URL is not configured. Check DATABASE_URL environment variable.');
+}
+
 // Initialize Sequelize using the url from config.js
 const sequelize = new Sequelize(config.url, {
   dialect: 'postgres',
