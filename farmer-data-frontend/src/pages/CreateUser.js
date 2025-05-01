@@ -2,7 +2,10 @@ import React, { useState, useContext } from 'react';
 import { Container, Form, Button, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+
+// Define API base URL from environment variable
 const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const CreateUser = () => {
   const { user } = useContext(AuthContext);
   const [formData, setFormData] = useState({
@@ -25,6 +28,8 @@ const CreateUser = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Sending request to:', `${API_BASE}/api/user`);
+    console.log('User:', user); // Debug user and role
     try {
       const res = await axios.post(`${API_BASE}/api/user`, formData, {
         withCredentials: true,
@@ -33,6 +38,7 @@ const CreateUser = () => {
       setError('');
       setFormData({ name: '', email: '', password: '', role: 'CEO', fpoName: '' });
     } catch (err) {
+      console.error('Create user error:', err.response?.data?.message || err.message);
       setError(err.response?.data?.message || 'Failed to create CEO');
       setSuccess('');
     }
