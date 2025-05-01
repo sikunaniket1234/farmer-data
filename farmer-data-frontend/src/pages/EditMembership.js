@@ -4,7 +4,7 @@ import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { Navigate, useParams, useNavigate } from 'react-router-dom';
 import './SubmitFarmer.css';
-
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 const EditMembership = () => {
   const { user } = useContext(AuthContext);
   const { id } = useParams();
@@ -22,7 +22,7 @@ const EditMembership = () => {
   useEffect(() => {
     const fetchMembership = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/membership/${id}`, { withCredentials: true });
+        const res = await axios.get(`${API_BASE}/api/membership/${id}`, { withCredentials: true });
         const membership = res.data;
         setFormData({
           farmerId: membership.farmerId,
@@ -37,7 +37,7 @@ const EditMembership = () => {
 
     const fetchFarmers = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/form', { withCredentials: true });
+        const res = await axios.get(`${API_BASE}/api/form`, { withCredentials: true });
         setFarmers(res.data);
       } catch (err) {
         setError('Failed to fetch farmers');
@@ -69,7 +69,7 @@ const EditMembership = () => {
         }
       });
 
-      const res = await axios.put(`http://localhost:5000/api/membership/${id}`, data, {
+      const res = await axios.put(`${API_BASE}/api/membership/${id}`, data, {
         withCredentials: true,
         headers: { 'Content-Type': 'multipart/form-data' },
       });

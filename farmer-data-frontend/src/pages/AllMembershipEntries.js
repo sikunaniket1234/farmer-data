@@ -3,6 +3,9 @@ import { Container, Table, Button, Form, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 
+// Define API base URL from environment variable
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const AllMembershipEntries = () => {
   const { user } = useContext(AuthContext);
   const [memberships, setMemberships] = useState([]);
@@ -14,7 +17,7 @@ const AllMembershipEntries = () => {
     const fetchMemberships = async () => {
       if (!user || user.role !== 'SuperAdmin') return; // Exit early if not SuperAdmin
       try {
-        const res = await axios.get('http://localhost:5000/api/membership', { withCredentials: true });
+        const res = await axios.get(`${API_BASE}/api/membership`, { withCredentials: true });
         console.log('Fetched memberships:', res.data); // Debug log
         setMemberships(res.data);
         const uniqueFpoNames = [...new Set(res.data.map(m => m.ceo?.fpoName).filter(Boolean))];
@@ -33,7 +36,7 @@ const AllMembershipEntries = () => {
         ? memberships.filter(m => m.ceo?.fpoName === fpoFilter)
         : memberships;
       console.log('Exporting filtered memberships:', filteredMemberships);
-      const res = await axios.post('http://localhost:5000/api/membership/export', {
+      const res = await axios.post(`${API_BASE}/api/membership/export`, {
         memberships: filteredMemberships,
       }, {
         withCredentials: true,

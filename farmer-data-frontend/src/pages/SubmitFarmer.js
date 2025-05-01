@@ -5,6 +5,8 @@ import { AuthContext } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
 import './SubmitFarmer.css';
 
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const SubmitFarmer = () => {
   const { user } = useContext(AuthContext);
   const [formData, setFormData] = useState({
@@ -38,7 +40,7 @@ const SubmitFarmer = () => {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/location', { withCredentials: true });
+        const res = await axios.get(`${API_BASE}/api/location`, { withCredentials: true });
         console.log('Fetched locations:', res.data); // Debug
         setLocations(res.data);
         setFilteredLocations((prev) => ({
@@ -177,7 +179,7 @@ const SubmitFarmer = () => {
         }
       });
 
-      const res = await axios.post('http://localhost:5000/api/form', data, {
+      const res = await axios.post(`${API_BASE}/api/form`, data, {
         withCredentials: true,
         headers: { 'Content-Type': 'multipart/form-data' },
       });

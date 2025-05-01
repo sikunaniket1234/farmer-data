@@ -5,6 +5,8 @@ import { AuthContext } from '../context/AuthContext';
 import { Navigate, useParams, useNavigate } from 'react-router-dom';
 import './SubmitFarmer.css';
 
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const EditFarmer = () => {
   const { user } = useContext(AuthContext);
   const { id } = useParams();
@@ -40,7 +42,7 @@ const EditFarmer = () => {
   useEffect(() => {
     const fetchFarmer = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/form/${id}`, { withCredentials: true });
+        const res = await axios.get(`${API_BASE}/api/form/${id}`, { withCredentials: true });
         const farmer = res.data;
         setFormData({
           name: farmer.name,
@@ -66,7 +68,7 @@ const EditFarmer = () => {
 
     const fetchLocations = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/location', { withCredentials: true });
+        const res = await axios.get(`${API_BASE}/api/location`, { withCredentials: true });
         setLocations(res.data);
         setFilteredLocations({
           states: res.data,
@@ -182,7 +184,7 @@ const EditFarmer = () => {
         }
       });
 
-      const res = await axios.patch(`http://localhost:5000/api/form/${id}`, data, {
+      const res = await axios.patch(`${API_BASE}/api/form/${id}`, data, {
         withCredentials: true,
         headers: { 'Content-Type': 'multipart/form-data' },
       });

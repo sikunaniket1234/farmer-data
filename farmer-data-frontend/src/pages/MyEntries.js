@@ -4,6 +4,8 @@ import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { Navigate, useNavigate } from 'react-router-dom';
 
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const MyEntries = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -14,7 +16,7 @@ const MyEntries = () => {
   useEffect(() => {
     const fetchFarmers = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/form', {
+        const res = await axios.get(`${API_BASE}/api/form`, {
           withCredentials: true,
         });
         setFarmers(res.data);
@@ -85,7 +87,7 @@ const MyEntries = () => {
                 <td>
                   {farmer.farmerPicture ? (
                     <img
-                      src={`http://localhost:5000/${farmer.farmerPicture}`}
+                      src={`${API_BASE}/${farmer.farmerPicture}`}
                       alt="Farmer"
                       style={{ width: '50px', height: '50px', objectFit: 'cover' }}
                     />

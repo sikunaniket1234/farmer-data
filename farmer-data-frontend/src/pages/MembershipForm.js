@@ -4,6 +4,8 @@ import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const MembershipForm = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -21,7 +23,7 @@ const MembershipForm = () => {
   useEffect(() => {
     const fetchFarmers = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/form', { withCredentials: true });
+        const res = await axios.get(`${API_BASE}/api/form`, { withCredentials: true });
         setFarmers(res.data.filter(farmer => !farmer.membership)); // Exclude farmers with membership
       } catch (err) {
         setError('Failed to fetch farmers');
@@ -54,7 +56,7 @@ const MembershipForm = () => {
       data.append('receiptNo', formData.receiptNo);
       data.append('receiptPicture', formData.receiptPicture);
 
-      const res = await axios.post('http://localhost:5000/api/membership', data, {
+      const res = await axios.post(`${API_BASE}/api/membership`, data, {
         withCredentials: true,
         headers: { 'Content-Type': 'multipart/form-data' },
       });

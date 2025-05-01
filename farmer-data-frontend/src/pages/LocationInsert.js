@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Form, Button, Alert, Table } from 'react-bootstrap';
 import axios from 'axios';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 const LocationInsert = () => {
   const [states, setStates] = useState([]);
@@ -27,7 +28,7 @@ const LocationInsert = () => {
   useEffect(() => {
     const fetchStates = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/location/states', { withCredentials: true });
+        const res = await axios.get(`${API_BASE}/api/location/states`, { withCredentials: true });
         setStates(res.data);
       } catch (err) {
         setError('Failed to fetch states: ' + (err.response?.data?.message || err.message) + '. Ensure the /api/location/states endpoint is defined.');
@@ -41,7 +42,7 @@ const LocationInsert = () => {
     if (selectedState) {
       const fetchDistricts = async () => {
         try {
-          const res = await axios.get(`http://localhost:5000/api/location/districts/${selectedState}`, { withCredentials: true });
+          const res = await axios.get(`${API_BASE}/api/location/districts/${selectedState}`, { withCredentials: true });
           setDistricts(res.data);
           setBlocks([]);
           setPanchayats([]);
@@ -63,7 +64,7 @@ const LocationInsert = () => {
     if (selectedState && selectedDistrict !== '') {
       const fetchBlocks = async () => {
         try {
-          const res = await axios.get(`http://localhost:5000/api/location/blocks/${selectedState}/${selectedDistrict}`, { withCredentials: true });
+          const res = await axios.get(`${API_BASE}/api/location/blocks/${selectedState}/${selectedDistrict}`, { withCredentials: true });
           setBlocks(res.data);
           setPanchayats([]);
           setVillages([]);
@@ -83,7 +84,7 @@ const LocationInsert = () => {
     if (selectedState && selectedDistrict !== '' && selectedBlock !== '') {
       const fetchPanchayats = async () => {
         try {
-          const res = await axios.get(`http://localhost:5000/api/location/panchayats/${selectedState}/${selectedDistrict}/${selectedBlock}`, { withCredentials: true });
+          const res = await axios.get(`${API_BASE}/api/location/panchayats/${selectedState}/${selectedDistrict}/${selectedBlock}`, { withCredentials: true });
           setPanchayats(res.data);
           setVillages([]);
           setSelectedPanchayat('');
@@ -101,7 +102,7 @@ const LocationInsert = () => {
     if (selectedState && selectedDistrict !== '' && selectedBlock !== '' && selectedPanchayat !== '') {
       const fetchVillages = async () => {
         try {
-          const res = await axios.get(`http://localhost:5000/api/location/villages/${selectedState}/${selectedDistrict}/${selectedBlock}/${selectedPanchayat}`, { withCredentials: true });
+          const res = await axios.get(`${API_BASE}/api/location/villages/${selectedState}/${selectedDistrict}/${selectedBlock}/${selectedPanchayat}`, { withCredentials: true });
           setVillages(res.data);
           setSelectedVillage('');
         } catch (err) {
@@ -130,7 +131,7 @@ const LocationInsert = () => {
     }
 
     try {
-      const res = await axios.post('http://localhost:5000/api/locationinsert/add', {
+      const res = await axios.post(`${API_BASE}/api/locationinsert/add`, {
         state: stateName,
         district: districtName,
         block: blockName,
@@ -174,7 +175,7 @@ const LocationInsert = () => {
     formData.append('file', file);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/locationinsert/import', formData, {
+      const res = await axios.post(`${API_BASE}/api/locationinsert/import`, formData, {
         withCredentials: true,
         headers: { 'Content-Type': 'multipart/form-data' },
       });

@@ -4,6 +4,8 @@ import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { Navigate, useNavigate } from 'react-router-dom';
 
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const MembershipEntries = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -14,7 +16,7 @@ const MembershipEntries = () => {
   useEffect(() => {
     const fetchMemberships = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/membership', {
+        const res = await axios.get(`${API_BASE}/api/membership`, {
           withCredentials: true,
         });
         setMemberships(res.data);

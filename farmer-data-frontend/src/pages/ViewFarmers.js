@@ -3,6 +3,8 @@ import { Container, Table, Button, Alert, Form, Row, Col } from 'react-bootstrap
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const ViewFarmers = () => {
   const { user } = useContext(AuthContext);
   const [farmers, setFarmers] = useState([]);
@@ -20,7 +22,7 @@ const ViewFarmers = () => {
   useEffect(() => {
     const fetchFarmers = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/form', { withCredentials: true });
+        const res = await axios.get(`${API_BASE}/api/form`, { withCredentials: true });
         setFarmers(res.data);
         setFilteredFarmers(res.data); // Initialize filtered list
       } catch (err) {
@@ -32,7 +34,7 @@ const ViewFarmers = () => {
 
   const handleExport = async () => {
     try {
-      const res = await axios.post('http://localhost:5000/api/form/export', {
+      const res = await axios.post(`${API_BASE}/api/form/export`, {
         farmers: filteredFarmers, // Send the visible filtered list
       }, {
         withCredentials: true,
@@ -242,7 +244,7 @@ const ViewFarmers = () => {
                 <td>
                   {farmer.farmerPicture ? (
                     <img
-                      src={`http://localhost:5000/${farmer.farmerPicture}`}
+                      src={`${API_BASE}/${farmer.farmerPicture}`}
                       alt="Farmer"
                       style={{ maxWidth: '100px', height: 'auto' }}
                     />

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Table, Button } from 'react-bootstrap';
 import axios from 'axios';
 import { Eye } from 'react-bootstrap-icons'; // Import the Eye icon
-
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 const UserCredentials = () => {
   const [users, setUsers] = useState([]);
   const [showPasswords, setShowPasswords] = useState({});
@@ -11,7 +11,7 @@ const UserCredentials = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/usercred/all', { withCredentials: true });
+        const res = await axios.get(`${API_BASE}/api/usercred/all`, { withCredentials: true });
         console.log('Fetched users:', res.data);
         setUsers(res.data);
       } catch (err) {
