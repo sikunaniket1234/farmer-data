@@ -9,6 +9,10 @@ require('dotenv').config();
 
 console.log('Starting server...');
 
+// Load your front-end origin from env (fallback to localhost)
+const FRONTEND_URL = process.env.CLIENT_URL || 'http://localhost:3000';
+const allowedOrigins = [FRONTEND_URL, 'http://localhost:3000'];
+
 const authRoutes = require('./routes/auth');
 const formRoutes = require('./routes/form');
 const userRoutes = require('./routes/user');
@@ -24,37 +28,15 @@ const app = express();
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir);
+  fs.mkdirSync(uploadsDir); // Fixed typo
 }
 
 console.log('Uploads directory setup');
 
-// CORS setup: Allow both localhost and deployed frontend
-const allowedOrigins = [
-  'http://localhost:3000',
-  process.env.CLIENT_URL || 'https://farmer-data-frontend.onrender.com',
-];
-
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error(`CORS policy: origin ${origin} not allowed`));
-    }
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-};
-
-app.use(cors(corsOptions));
-// Handle preflight (OPTIONS) requests
-app.options('*', cors(corsOptions));
-
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
-app.use('/uploads', express.static(uploadsDir));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 console.log('Middleware configured');
 
@@ -68,7 +50,6 @@ app.use('/api/locationinsert', locationInsertRoutes);
 
 console.log('Routes mounted');
 
-// Use the port provided by Render or fallback to 5000 for local development
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
