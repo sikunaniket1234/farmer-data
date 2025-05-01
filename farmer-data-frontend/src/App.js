@@ -13,7 +13,7 @@ import MembershipForm from './pages/MembershipForm';
 import MembershipEntries from './pages/MembershipEntries';
 import AllMembershipEntries from './pages/AllMembershipEntries';
 import UserCredentials from './pages/UserCredentials'; 
-import LocationInsert from './pages/LocationInsert'
+import LocationInsert from './pages/LocationInsert';
 import EditFarmer from './pages/EditFarmer';
 import EditMembership from './pages/EditMembership';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -45,6 +45,10 @@ const App = () => {
         <Route
           path="/super-admin"
           element={user && user.role === 'SuperAdmin' ? <SuperAdmin /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/superadmin"
+          element={<Navigate to="/super-admin" replace />}
         />
         <Route
           path="/submit-farmer"
@@ -90,6 +94,7 @@ const App = () => {
           path="/location-insert"
           element={user && user.role === 'SuperAdmin' ? <LocationInsert /> : <Navigate to="/login" />}
         />
+        <Route path="*" element={<div className="text-center mt-5">Page Not Found</div>} />
       </Routes>
     </Router>
   );
