@@ -8,7 +8,7 @@ const path = require('path');
 const ExcelJS = require('exceljs');
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'Uploads/'),
+  destination: (req, file, cb) => cb(null, 'uploads/'),
   filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)),
 });
 const upload = multer({ storage });
@@ -86,7 +86,7 @@ router.post('/', auth(['CEO']), upload.single('receiptPicture'), async (req, res
       membershipFee: parseInt(membershipFee),
       receiptNo,
       ceoId: req.user.id,
-      receiptPicture: req.file ? `Uploads/${req.file.filename}` : null,
+      receiptPicture: req.file ? `uploads/${req.file.filename}` : null,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -118,7 +118,7 @@ router.put('/:id', auth(['CEO']), upload.single('receiptPicture'), async (req, r
       farmerId: farmerId ? parseInt(farmerId) : membership.farmerId,
       membershipFee: membershipFee ? parseInt(membershipFee) : membership.membershipFee,
       receiptNo: receiptNo || membership.receiptNo,
-      receiptPicture: req.file ? `Uploads/${req.file.filename}` : membership.receiptPicture,
+      receiptPicture: req.file ? `uploads/${req.file.filename}` : membership.receiptPicture,
       updatedAt: new Date(),
     };
     await membership.update(updateData);
