@@ -28,7 +28,7 @@ const app = express();
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir); // Fixed typo
+  fs.mkdirSync(uploadsDir);
 }
 
 console.log('Uploads directory setup');
@@ -46,9 +46,8 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
-app.use(cors(corsOptions));
-// Handle preflight (OPTIONS) requests
-app.options('*', cors(corsOptions));
+app.use(cors(corsOptions)); // This handles preflight requests automatically
+
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
