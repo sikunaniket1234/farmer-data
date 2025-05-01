@@ -15,7 +15,7 @@ const Login = () => {
     e.preventDefault();
     try {
       await login(email, password, activeRole);
-      navigate(activeRole === 'SuperAdmin' ? '/superadmin' : '/ceo');
+      navigate(activeRole === 'SuperAdmin' ? '/super-admin' : '/ceo');
     } catch (err) {
       setError(err.message || 'Login failed');
     }
