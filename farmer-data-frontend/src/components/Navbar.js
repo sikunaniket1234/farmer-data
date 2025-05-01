@@ -26,7 +26,7 @@ const AppNavbar = () => {
             <>
               <Nav.Link
                 as={Link}
-                to={user.role === 'SuperAdmin' ? '/superadmin' : '/ceo'}
+                to={user.role === 'SuperAdmin' ? '/super-admin' : '/ceo'}
                 className="btn btn-danger text-white"
               >
                 Dashboard
