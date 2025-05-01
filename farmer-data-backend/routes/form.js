@@ -10,7 +10,7 @@ const fs = require('fs');
 const ExcelJS = require('exceljs');
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'Uploads/'),
+  destination: (req, file, cb) => cb(null, 'uploads/'),
   filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)),
 });
 const upload = multer({ storage });
@@ -133,7 +133,7 @@ router.get('/:id', auth(['SuperAdmin', 'CEO']), async (req, res) => {
 router.post('/', auth(['CEO']), upload.single('farmerPicture'), async (req, res) => {
   try {
     const { crops, state, district, block, panchayat, village, ...otherData } = req.body;
-    const farmerPicture = req.file ? `Uploads/${req.file.filename}` : 'Uploads/default.jpg';
+    const farmerPicture = req.file ? `uploads/${req.file.filename}` : 'uploads/default.jpg';
 
     const location = {
       state: state || '',
@@ -155,7 +155,7 @@ router.post('/', auth(['CEO']), upload.single('farmerPicture'), async (req, res)
     res.status(201).json(farmer);
   } catch (error) {
     if (req.file) {
-      fs.unlinkSync(path.join(__dirname, '..', 'Uploads', req.file.filename));
+      fs.unlinkSync(path.join(__dirname, '..', 'uploads', req.file.filename));
     }
     console.error('Create farmer error:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
@@ -182,7 +182,7 @@ router.patch('/:id', auth(['CEO']), upload.single('farmerPicture'), async (req, 
     const updateData = {
       ...otherData,
       crops: crops ? JSON.parse(crops) : farmer.crops,
-      farmerPicture: req.file ? `Uploads/${req.file.filename}` : farmer.farmerPicture,
+      farmerPicture: req.file ? `uploads/${req.file.filename}` : farmer.farmerPicture,
       location: {
         state: state || farmer.location?.state || '',
         district: district || farmer.location?.district || '',
@@ -195,7 +195,7 @@ router.patch('/:id', auth(['CEO']), upload.single('farmerPicture'), async (req, 
     res.json(farmer);
   } catch (error) {
     if (req.file) {
-      fs.unlinkSync(path.join(__dirname, '..', 'Uploads', req.file.filename));
+      fs.unlinkSync(path.join(__dirname, '..', 'uploads', req.file.filename));
     }
     console.error('Update farmer error:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
