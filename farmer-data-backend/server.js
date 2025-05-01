@@ -28,33 +28,18 @@ const app = express();
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir);
+  fs.mkdirSync(UploadsDir);
 }
+
 console.log('Uploads directory setup');
 
-// CORS middleware
-app.use(cors({
-  origin(origin, callback) {
-    // allow REST tools (no origin) or our whitelisted origins
-    if (!origin || allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    return callback(new Error(`CORS policy: Origin ${origin} not allowed`));
-  },
-  credentials: true,
-}));
-
-// For preflight requests
-app.options('*', cors());
-
-// Standard middleware
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
-app.use('/uploads', express.static(uploadsDir));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 console.log('Middleware configured');
 
-// API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/form', formRoutes);
 app.use('/api/user', userRoutes);
@@ -65,6 +50,9 @@ app.use('/api/locationinsert', locationInsertRoutes);
 
 console.log('Routes mounted');
 
+app.listen(5000, () => {
+  console.log('Server running on port 5000');
+});
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
